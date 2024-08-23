@@ -43,38 +43,3 @@ jobs:
         run: sbt publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Universal Artifact
-        run: sbt Universal/packageBin
-
-      - name: Archive package and documentation
-        uses: actions/upload-artifact@v3
-        with:
-          name: csvw-check-universal
-          path: target/universal/csvw-check-*.zip
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build
-        run: |
-          sbt docker:publishLocal
-      - name: Push
-        run: |
-          vers_num="$(grep 'version :=' build.sbt | head -n1 | sed 's/.*"\(.*\)".*/\1/')"
-
-          rel_cand_substring='rc'
-          vers_num_lower_case=${vers_num,,}
-
-          local_param="csvwcheck:$vers_num"
-          remote_param="gsscogs/csvw-check"
-          push_param="$remote_param:v$vers_num"
-          latest_param="$remote_param:latest"
-
-          docker tag $local_param $push_param
-          if [[ "$vers_num_lower_case" != *"$rel_cand_substring"* ]]
-            then docker tag $push_param $latest_param
-          fi
-          docker image push --all-tags $remote_param
