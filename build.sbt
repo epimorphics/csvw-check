@@ -39,12 +39,12 @@ libraryDependencies += "com.ibm.icu" % "icu4j" % "72.1"
 libraryDependencies += "org.apache.commons" % "commons-csv" % "1.10.0"
 libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.10"
 
-publishTo := Some("GitHub Maven package repo for GSS-Cogs" at "https://maven.pkg.github.com/gss-cogs/csvw-check")
+publishTo := Some("GitHub Maven package repo for GSS-Cogs" at "https://maven.pkg.github.com/epimorphics/csvw-check")
 publishMavenStyle := true
 credentials += Credentials(
   "GitHub Package Registry",
   "maven.pkg.github.com",
-  "gss-cogs",
+  "epimorphics",
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
 
